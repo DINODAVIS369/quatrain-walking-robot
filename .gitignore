@@ -1,0 +1,23 @@
+# Python environments and generated files
+.venv
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Training output: keep the published checkpoint and ONNX policy only
+logs/*
+!logs/quatrain_walking_robot/
+logs/quatrain_walking_robot/*
+!logs/quatrain_walking_robot/robodog_velocity/
+logs/quatrain_walking_robot/robodog_velocity/*
+!logs/quatrain_walking_robot/robodog_velocity/model_4999.pt
+!logs/quatrain_walking_robot/robodog_velocity/robodog_velocity.onnx
+
+# Local editor and OS files
+.DS_Store
+.idea/
+.vscode/
+
+# Generated debugging snapshot
+robot_debug_bundle.txt

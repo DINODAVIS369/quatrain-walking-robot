@@ -1,0 +1,538 @@
+<?xml version="1.0"?>
+<robot name="robodog">
+
+  <!-- Materials -->
+  <material name="orange">
+    <color rgba="1.0 0.45 0.0 1.0"/>
+  </material>
+  <material name="dark_gray">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="black">
+    <color rgba="0.05 0.05 0.05 1.0"/>
+  </material>
+  <material name="rubber">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+
+  <!-- ================= BASE LINK (TRUNK) ================= -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0"/>
+      <mass value="5.20"/>
+      <inertia ixx="0.0225" iyy="0.0678" izz="0.0799" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.38 0.18 0.10"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision name="base_collision">
+      <geometry>
+        <box size="0.38 0.18 0.10"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ================= FRONT LEFT (FL) LEG ================= -->
+
+  <!-- Hip link (Roll) -->
+  <link name="FL_hip">
+    <inertial>
+      <origin xyz="0 0.02 0"/>
+      <mass value="0.68"/>
+      <inertia ixx="0.0007" iyy="0.0005" izz="0.0004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 0.0600 0" rpy="1.5708 0 0"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="FL_hip_collision">
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 0.0600 0" rpy="1.5708 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="FL_hip_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="FL_hip"/>
+    <origin xyz="0.234 0.0465 0.0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.0472" upper="1.0472" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Thigh link (Pitch) -->
+  <link name="FL_thigh">
+    <inertial>
+      <origin xyz="0 0.02 -0.10"/>
+      <mass value="1.00"/>
+      <inertia ixx="0.0048" iyy="0.0046" izz="0.0007" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="orange"/>
+    </visual>
+    <collision name="FL_thigh_collision">
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="FL_thigh_joint" type="revolute">
+    <parent link="FL_hip"/>
+    <child link="FL_thigh"/>
+    <origin xyz="0.0 0.0955 0.0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="3.4907" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Calf link (Knee Pitch) -->
+  <link name="FL_calf">
+    <inertial>
+      <origin xyz="0 0 -0.10"/>
+      <mass value="0.20"/>
+      <inertia ixx="0.0015" iyy="0.0015" izz="0.00004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="black"/>
+    </visual>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <origin xyz="0 0 -0.015"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="FL_calf_collision">
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="FL_calf_joint" type="revolute">
+    <parent link="FL_thigh"/>
+    <child link="FL_calf"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.7227" upper="-0.83776" effort="45.43" velocity="15.70"/>
+  </joint>
+
+  <!-- Foot link (Contact sphere) -->
+  <link name="FL_foot">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.06"/>
+      <inertia ixx="0.00002" iyy="0.00002" izz="0.00002" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="rubber"/>
+    </visual>
+    <collision name="FL_foot_collision">
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="FL_foot_joint" type="fixed">
+    <parent link="FL_calf"/>
+    <child link="FL_foot"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+  </joint>
+
+  <!-- ================= FRONT RIGHT (FR) LEG ================= -->
+
+  <!-- Hip link (Roll) -->
+  <link name="FR_hip">
+    <inertial>
+      <origin xyz="0 -0.02 0"/>
+      <mass value="0.68"/>
+      <inertia ixx="0.0007" iyy="0.0005" izz="0.0004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 -0.0600 0" rpy="1.5708 0 0"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="FR_hip_collision">
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 -0.0600 0" rpy="1.5708 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="FR_hip_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="FR_hip"/>
+    <origin xyz="0.234 -0.0465 0.0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.0472" upper="1.0472" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Thigh link (Pitch) -->
+  <link name="FR_thigh">
+    <inertial>
+      <origin xyz="0 -0.02 -0.10"/>
+      <mass value="1.00"/>
+      <inertia ixx="0.0048" iyy="0.0046" izz="0.0007" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="orange"/>
+    </visual>
+    <collision name="FR_thigh_collision">
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="FR_thigh_joint" type="revolute">
+    <parent link="FR_hip"/>
+    <child link="FR_thigh"/>
+    <origin xyz="0.0 -0.0955 0.0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="3.4907" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Calf link (Knee Pitch) -->
+  <link name="FR_calf">
+    <inertial>
+      <origin xyz="0 0 -0.10"/>
+      <mass value="0.20"/>
+      <inertia ixx="0.0015" iyy="0.0015" izz="0.00004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="black"/>
+    </visual>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <origin xyz="0 0 -0.015"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="FR_calf_collision">
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="FR_calf_joint" type="revolute">
+    <parent link="FR_thigh"/>
+    <child link="FR_calf"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.7227" upper="-0.83776" effort="45.43" velocity="15.70"/>
+  </joint>
+
+  <!-- Foot link (Contact sphere) -->
+  <link name="FR_foot">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.06"/>
+      <inertia ixx="0.00002" iyy="0.00002" izz="0.00002" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="rubber"/>
+    </visual>
+    <collision name="FR_foot_collision">
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="FR_foot_joint" type="fixed">
+    <parent link="FR_calf"/>
+    <child link="FR_foot"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+  </joint>
+
+  <!-- ================= REAR LEFT (RL) LEG ================= -->
+
+  <!-- Hip link (Roll) -->
+  <link name="RL_hip">
+    <inertial>
+      <origin xyz="0 0.02 0"/>
+      <mass value="0.68"/>
+      <inertia ixx="0.0007" iyy="0.0005" izz="0.0004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 0.0600 0" rpy="1.5708 0 0"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="RL_hip_collision">
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 0.0600 0" rpy="1.5708 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="RL_hip_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="RL_hip"/>
+    <origin xyz="-0.234 0.0465 0.0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.0472" upper="1.0472" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Thigh link (Pitch) -->
+  <link name="RL_thigh">
+    <inertial>
+      <origin xyz="0 0.02 -0.10"/>
+      <mass value="1.00"/>
+      <inertia ixx="0.0048" iyy="0.0046" izz="0.0007" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="orange"/>
+    </visual>
+    <collision name="RL_thigh_collision">
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="RL_thigh_joint" type="revolute">
+    <parent link="RL_hip"/>
+    <child link="RL_thigh"/>
+    <origin xyz="0.0 0.0955 0.0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5236" upper="4.5379" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Calf link (Knee Pitch) -->
+  <link name="RL_calf">
+    <inertial>
+      <origin xyz="0 0 -0.10"/>
+      <mass value="0.20"/>
+      <inertia ixx="0.0015" iyy="0.0015" izz="0.00004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="black"/>
+    </visual>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <origin xyz="0 0 -0.015"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="RL_calf_collision">
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="RL_calf_joint" type="revolute">
+    <parent link="RL_thigh"/>
+    <child link="RL_calf"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.7227" upper="-0.83776" effort="45.43" velocity="15.70"/>
+  </joint>
+
+  <!-- Foot link (Contact sphere) -->
+  <link name="RL_foot">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.06"/>
+      <inertia ixx="0.00002" iyy="0.00002" izz="0.00002" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="rubber"/>
+    </visual>
+    <collision name="RL_foot_collision">
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="RL_foot_joint" type="fixed">
+    <parent link="RL_calf"/>
+    <child link="RL_foot"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+  </joint>
+
+  <!-- ================= REAR RIGHT (RR) LEG ================= -->
+
+  <!-- Hip link (Roll) -->
+  <link name="RR_hip">
+    <inertial>
+      <origin xyz="0 -0.02 0"/>
+      <mass value="0.68"/>
+      <inertia ixx="0.0007" iyy="0.0005" izz="0.0004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 -0.0600 0" rpy="1.5708 0 0"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="RR_hip_collision">
+      <geometry>
+        <cylinder length="0.04" radius="0.046"/>
+      </geometry>
+      <origin xyz="0 -0.0600 0" rpy="1.5708 0 0"/>
+    </collision>
+  </link>
+
+  <joint name="RR_hip_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="RR_hip"/>
+    <origin xyz="-0.234 -0.0465 0.0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.0472" upper="1.0472" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Thigh link (Pitch) -->
+  <link name="RR_thigh">
+    <inertial>
+      <origin xyz="0 -0.02 -0.10"/>
+      <mass value="1.00"/>
+      <inertia ixx="0.0048" iyy="0.0046" izz="0.0007" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="orange"/>
+    </visual>
+    <collision name="RR_thigh_collision">
+      <geometry>
+        <box size="0.045 0.035 0.18"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="RR_thigh_joint" type="revolute">
+    <parent link="RR_hip"/>
+    <child link="RR_thigh"/>
+    <origin xyz="0.0 -0.0955 0.0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.5236" upper="4.5379" effort="23.7" velocity="30.1"/>
+  </joint>
+
+  <!-- Calf link (Knee Pitch) -->
+  <link name="RR_calf">
+    <inertial>
+      <origin xyz="0 0 -0.10"/>
+      <mass value="0.20"/>
+      <inertia ixx="0.0015" iyy="0.0015" izz="0.00004" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+      <material name="black"/>
+    </visual>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <origin xyz="0 0 -0.015"/>
+      <material name="dark_gray"/>
+    </visual>
+    <collision name="RR_calf_collision">
+      <geometry>
+        <cylinder length="0.213" radius="0.012"/>
+      </geometry>
+      <origin xyz="0 0 -0.09"/>
+    </collision>
+  </link>
+
+  <joint name="RR_calf_joint" type="revolute">
+    <parent link="RR_thigh"/>
+    <child link="RR_calf"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.7227" upper="-0.83776" effort="45.43" velocity="15.70"/>
+  </joint>
+
+  <!-- Foot link (Contact sphere) -->
+  <link name="RR_foot">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.06"/>
+      <inertia ixx="0.00002" iyy="0.00002" izz="0.00002" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+      <material name="rubber"/>
+    </visual>
+    <collision name="RR_foot_collision">
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="RR_foot_joint" type="fixed">
+    <parent link="RR_calf"/>
+    <child link="RR_foot"/>
+    <origin xyz="0.0 0.0 -0.213"/>
+  </joint>
+
+</robot>
